@@ -43,36 +43,9 @@ reset_envvars() {
 }
 reset_envvars
 
-## Find who we are.  Look in the path if we contain no directory separator.
-#as_myself=
-#case $0 in #((
-#  *[\\/]* ) as_myself=$0 ;;
-#  *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-#for as_dir in $PATH
-#do
-#  IFS=$as_save_IFS
-#  case $as_dir in #(((
-#    '') as_dir=./ ;;
-#    */) ;;
-#    *) as_dir=$as_dir/ ;;
-#  esac
-#    test -r "$as_dir$0" && as_myself=$as_dir$0 && break
-#  done
-#IFS=$as_save_IFS
-#
-#     ;;
-#esac
-## We did not find ourselves, most probably we were run as 'sh COMMAND'
-## in which case we are not to be found in the path.
-#if test "x$as_myself" = x; then
-#  as_myself=$0
-#fi
-#if test ! -f "$as_myself"; then
-#  printf "%s\n" "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
-#  exit 1
-#fi
-#
-#
+# `$0`: "Expands to the name of the shell or shell script." [[source](https://linux.die.net/man/1/sh)]
+as_myself=$0
+
 ## Use a proper internal environment variable to ensure we don't fall
 #  # into an infinite loop, continuously re-executing ourselves.
 #  if test x"${_as_can_reexec}" != xno && test "x$CONFIG_SHELL" != x; then
