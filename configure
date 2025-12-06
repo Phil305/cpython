@@ -18,51 +18,11 @@
 set -xeuo pipefail
 set -o posix
 
-## Be more Bourne compatible
-DUALCASE=1
-export DUALCASE # for MKS sh
-if test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1; then
+main() {
+    #make_sh_bourne_compat
+    # reset_troublesome_envvars
     exit 1
-	:
-    emulate sh
-    NULLCMD=:
-    # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
-    # is contrary to our usage.  Disable this feature.
-    alias -g '${1+"$@"}'='"$@"'
-    setopt NO_GLOB_SUBST
-else
-	case e in                           #(
-	e) case $( (set -o) 2>/dev/null) in #(
-	*posix*)
-		:
-		set -o posix
-		;; #(
-		    *)
-                exit 1;
-		        :
-		        ;;
-	esac ;;
-	esac
-fi
-#
-#
-#
-## Reset variables that may have inherited troublesome values from
-## the environment.
-#
-## IFS needs to be set, to space, tab, and newline, in precisely that order.
-## (If _AS_PATH_WALK were called with IFS unset, it would have the
-## side effect of setting IFS to empty, thus disabling word splitting.)
-## Quoting is to prevent editors from complaining about space-tab.
-#as_nl='
-#'
-#export as_nl
-#IFS=" ""   $as_nl"
-#
-#PS1='$ '
-#PS2='> '
-#PS4='+ '
-#
+
 ## Ensure predictable behavior from utilities with locale-dependent output.
 #LC_ALL=C
 #export LC_ALL
@@ -35900,4 +35860,53 @@ fi
 #  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Your compiler or platform does have a working C11 stdatomic.h. A future version of Python may require stdatomic.h." >&5
 #printf "%s\n" "$as_me: Your compiler or platform does have a working C11 stdatomic.h. A future version of Python may require stdatomic.h." >&6;}
 #fi
-#
+
+}
+
+reset_troublesome_envvars(){
+    # Reset variables that may have inherited troublesome values from the environment.
+
+    # IFS needs to be set, to space, tab, and newline, in precisely that order.
+    # (If _AS_PATH_WALK were called with IFS unset, it would have the
+    # side effect of setting IFS to empty, thus disabling word splitting.)
+    # Quoting is to prevent editors from complaining about space-tab.
+    as_nl='
+    '
+    export as_nl
+    IFS=" ""   $as_nl"
+
+    PS1='$ '
+    PS2='> '
+    PS4='+ '
+}
+
+make_sh_bourne_compat() {
+    # Be more Bourne compatible
+    DUALCASE=1
+    export DUALCASE # for MKS sh
+    if test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1; then
+        exit 1
+        :
+        emulate sh
+        NULLCMD=:
+        # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
+        # is contrary to our usage.  Disable this feature.
+        alias -g '${1+"$@"}'='"$@"'
+        setopt NO_GLOB_SUBST
+    else
+        case e in                           #(
+            e) case $( (set -o) 2>/dev/null) in #(
+                *posix*)
+                :
+                set -o posix
+                ;; #(
+            *)
+                exit 1;
+                :
+                ;;
+        esac ;;
+esac
+    fi
+}
+
+main
